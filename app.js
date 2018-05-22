@@ -35,7 +35,7 @@ async function starFarm() {
             await page.waitFor(2000);
             await page.click('#js-content-live > div:nth-child(3) > ul > li:nth-child(' + (countRound + 1) + ') > div > div > div.listcard-image > div.listcard-overview > div > a:nth-child(1) > span');
 
-            await page.waitFor(3000);
+            await page.waitFor(5000);
             const star = await page.$eval('#room-gift-item-list > li:nth-child(1) > div', (element) => {
                 count = element.innerHTML.split(' ');
                 return count[1];
@@ -49,9 +49,9 @@ async function starFarm() {
             }
             await page.click('#icon-room-twitter-post > span');
             await page.click('#twitter-post-button');
-
             await console.log('Tweet :' + (countRound + 1));
-            await page.waitFor(5000);
+
+            await page.waitFor(32000);
             await page.click('#icon-room-menu');
             await page.waitFor(2000);
             await page.hover('#js-side-box');
