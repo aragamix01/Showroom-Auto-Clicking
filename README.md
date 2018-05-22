@@ -1,6 +1,8 @@
 # Show room auto farm
-1.  install node.js
-2.  run command npm install
-3.  get into app.js file then change id,pass
-4.  run command node app.js
-5.  wait and see console
+1.  ติดตั้ง Node.js https://nodejs.org/en/
+    1.  เข้าไปที่โฟลเดอร์ที่ดาวน์โหลดมา
+    2.  เข้า CMD
+2.  รันคำสั่ง npm install
+3.  เข้าไปในไฟล์ app.js จากนั้นเปลี่ยน id,pass ให้ตรงตามที่ใช้
+4.  รันคำสั่ง node app.js
+5.  รอและสังเกตที่ log ที่ออกมาโดยการฟาร์มจะใช้เวลา 6-10 นาที
