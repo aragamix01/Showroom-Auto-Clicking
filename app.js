@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 async function starFarm() {
     const id = '/*YOUR ID*/';
     const pass = '/*YOUR PASSWORD*/';
-    const Process = 'true';//set false if want to see browser window
+    const Process = true;//set false if want to see browser window
     let farming = true;
     let countRound = 0;
 
@@ -36,11 +36,15 @@ async function starFarm() {
             await page.click('#js-content-live > div:nth-child(3) > ul > li:nth-child(' + (countRound + 1) + ') > div > div > div.listcard-image > div.listcard-overview > div > a:nth-child(1) > span');
 
             await page.waitFor(5000);
+            const roomName = await page.$eval('#room-header > div > div.room-header-user-info > h1', (name) => {
+                return name.innerHTML;
+            });
+            await console.log('\n get in: '+ roomName + 'room');
+            
             const star = await page.$eval('#room-gift-item-list > li:nth-child(1) > div', (element) => {
                 count = element.innerHTML.split(' ');
                 return count[1];
-            })
-
+            });
             await console.log('current star: ' + star);
             if (star == 99) {
                 console.log('farm complete');
@@ -51,7 +55,21 @@ async function starFarm() {
             await page.click('#twitter-post-button');
             await console.log('Tweet :' + (countRound + 1));
 
-            await page.waitFor(32000);
+            var twirlTimer = (function () {
+                var P = ["\\", "|", "/", "-"];
+                var x = 0;
+                return setInterval(function () {
+                    process.stdout.write("\r waiting " + P[x++]);
+                    x &= 3;
+                }, 250);
+            })();
+
+            await page.waitFor(32000).then(
+                () => {
+                    clearInterval(twirlTimer);
+                }
+            );
+
             await page.click('#icon-room-menu');
             await page.waitFor(2000);
             await page.hover('#js-side-box');
