@@ -15,7 +15,7 @@ async function starFarm() {
     });
     await page.setViewport({ width: 1500, height: 700 });
     await page.click('#js-side-box > div > div > ul > li:nth-child(2) > a');
-
+    await console.log('::Program is starting::');
     try {
         page.evaluate((a, b) => {
             document.querySelector('#js-login-form > div:nth-child(2) > div:nth-child(1) > input').value = a;
