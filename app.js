@@ -22,6 +22,7 @@ async function starFarm() {
             document.querySelector('#js-login-form > div:nth-child(2) > div:nth-child(2) > input').value = b;
             document.querySelector('#js-login-submit').click();
         }, id, pass);
+        await page.waitForNavigation();
         await console.log('Login complete');
     } catch (error) {
         console.log('cant login');
@@ -29,28 +30,46 @@ async function starFarm() {
     
     try {
         while (farming) {
-            await page.waitFor(5000);
-            await page.click('#js-content-live-menu > li:nth-child(2)');
-
-            await page.waitFor(2000);
-            await page.click('#js-content-live > div:nth-child(3) > ul > li:nth-child(' + (countRound + 1) + ') > div > div > div.listcard-image > div.listcard-overview > div > a:nth-child(1) > span');
-
-            await page.waitFor(5000);
-            const roomName = await page.$eval('#room-header > div > div.room-header-user-info > h1', (name) => {
-                return name.innerHTML;
-            });
-            await console.log('\n get in: '+ roomName + 'room');
-            
-            const star = await page.$eval('#room-gift-item-list > li:nth-child(1) > div', (element) => {
-                count = element.innerHTML.split(' ');
-                return count[1];
-            });
-            await console.log('current star: ' + star);
-            if (star == 99) {
-                console.log('farm complete');
-                farming = false;
-                break;
+            if (countRound > 0) {
+                await page.waitForSelector(
+                    '#js-content-live-menu > li:nth-child(2)',
+                    true,
+                );
             }
+            page.click('#js-content-live-menu > li:nth-child(2)');
+           
+            let room = '#js-content-live > div:nth-child(3) > ul > li:nth-child(' + (countRound + 1) + ') > div > div > div.listcard-image > div.listcard-overview > div > a:nth-child(1) > span';
+            await page.waitForSelector(
+                room,
+                true,
+            );
+            page.click(room);
+
+            await page.waitForSelector(
+                '#room-gift-item-list > li:nth-child(1) > div',
+                true,
+            );
+
+            try {
+                const roomName = await page.$eval('#room-header > div > div.room-header-user-info > h1', (name) => {
+                    return name.innerHTML;
+                });
+                await console.log('\n get in: '+ roomName + 'room');
+            
+                const star = await page.$eval('#room-gift-item-list > li:nth-child(5) > div', (element) => {
+                    count = element.innerHTML.split(' ');
+                    return count[1];
+                });
+                await console.log('current star: ' + star);
+                if (star == 99) {
+                    console.log('farm complete');
+                    farming = false;
+                    break;
+                }
+            } catch (error) {
+                continue;
+            }
+
             await page.click('#icon-room-twitter-post > span');
             await page.click('#twitter-post-button');
             await console.log('Tweet :' + (countRound + 1));
@@ -64,7 +83,7 @@ async function starFarm() {
                 }, 250);
             })();
 
-            await page.waitFor(32000).then(
+            await page.waitFor(35000).then(
                 () => {
                     clearInterval(twirlTimer);
                 }
